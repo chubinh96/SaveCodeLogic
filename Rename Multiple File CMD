@@ -1,0 +1,9 @@
+//rename multiple file by cmd
+1. create a file with name is ****.bat
+2. coppy and paste below code to file .bat
+for %i in (*.*) do (
+set vv=%i
+cmd /c ren %i %vv:~7,50%
+)
+3. open cmd and move file .bat to cmd 
+4. run
