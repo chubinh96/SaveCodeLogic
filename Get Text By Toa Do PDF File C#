@@ -1,0 +1,25 @@
+private void get_txt_with_scan_Click(object sender, EventArgs e)
+        {
+            string pdfFile = @"\\10.121.21.2\data\DeliveryNote\SaveCopyPdfFile\Upload\cmsc_n.pdf";
+            PDDocument doc = PDDocument.load(pdfFile);
+            PDFTextStripperByArea stripper = new PDFTextStripperByArea();
+            List<string> list = new List<string>();
+            //position 1-1
+            int x11 = 290;
+            int y11 = 20;
+            int w11 = 120;
+            int h11 = 100;
+            stripper.addRegion("testRegion", new java.awt.Rectangle(x11, y11, w11, h11));
+            stripper.extractRegions((PDPage)doc.getDocumentCatalog().getAllPages().get(0));
+            string text11 = stripper.getTextForRegion("testRegion").Trim();
+            
+            if (text11.Trim() != "")
+            {
+                MessageBox.Show(text11);
+            }
+            else
+            {
+                MessageBox.Show("no");
+            }
+            doc.close(); 
+        }
