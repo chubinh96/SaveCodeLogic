@@ -1,0 +1,9 @@
+string uploadFilePathPath = Application.StartupPath + "\\NewPrinterLog\\test\\"; 
+            
+ DirectoryInfo d = new DirectoryInfo(uploadFilePathPath);
+ FileInfo[] Files = d.GetFiles("*");
+ foreach (FileInfo file in Files)
+ {
+    string newFile = uploadFilePathPath + file.Name.Substring(0, 10) + ".pdf";
+    File.Move(file.FullName, newFile);
+ }
