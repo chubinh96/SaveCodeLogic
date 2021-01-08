@@ -1,0 +1,75 @@
+private void merge_pdf_Click(object sender, EventArgs e)
+        {
+            List<string> list = new List<string>(3);
+            string pdf1 = Application.StartupPath + "\\NewPrinterLog\\Merge\\cmsc_n.pdf";
+            string pdf2 = Application.StartupPath + "\\NewPrinterLog\\Merge\\cmsc_o.pdf";
+            string pdf3 = Application.StartupPath + "\\NewPrinterLog\\Merge\\cmsc_n_1.pdf";
+            string pdf4 = Application.StartupPath + "\\NewPrinterLog\\Merge\\cmsc_o_1.pdf";
+            list.Add(pdf1);
+            list.Add(pdf2);
+            list.Add(pdf3);
+            list.Add(pdf4);
+            string outFile = Application.StartupPath + "\\NewPrinterLog\\Merge\\output.pdf";
+            MergePdf(list, outFile, 0, -15);
+        }
+
+        public static void MergePdf(List<String> InFiles, String OutFile, int spaceFirst, int spaceLast)
+        {
+            string exFile = InFiles[0];
+            Stream newpdfStream = new FileStream(OutFile, FileMode.Create, FileAccess.ReadWrite);
+            PdfReader readerSize = new PdfReader(exFile);
+            iTextSharp.text.Rectangle pageSize = readerSize.GetPageSize(1);
+            Document document = new Document(pageSize);
+            PdfWriter writer = PdfWriter.GetInstance(document, newpdfStream);
+            document.Open();
+
+            int pageTotal = 1;
+            if (InFiles.Count > 0)
+            {
+                if (InFiles.Count %2 == 0)
+                {
+                    pageTotal = InFiles.Count / 2;
+                }
+                else
+                {
+                    pageTotal = (InFiles.Count + 1) / 2;
+                }
+            }
+            for (int i = 1; i <= pageTotal; i++)
+            {
+                if (i == pageTotal)
+                {
+                    string file1 = InFiles[(i * 2) - 2];
+                    PdfReader reader1 = new PdfReader(File.ReadAllBytes(file1));
+                    PdfImportedPage page1 = writer.GetImportedPage(reader1, 1);
+                    writer.DirectContentUnder.AddTemplate(page1, 0, spaceFirst);
+                    if (InFiles.Count % 2 == 0)
+                    {
+                        string file2 = InFiles[(i * 2) - 1];
+                        PdfReader reader2 = new PdfReader(File.ReadAllBytes(file2));
+                        PdfImportedPage page2 = writer.GetImportedPage(reader2, 1);
+                        writer.DirectContentUnder.AddTemplate(page2, 0, (-reader2.GetPageSizeWithRotation(1).Height * 1 / 2) + spaceLast);
+                    }
+                    document.SetPageSize(pageSize);
+                    document.NewPage();
+                }
+                else
+                {
+                    string file1 = InFiles[(i * 2) - 2];
+                    PdfReader reader1 = new PdfReader(File.ReadAllBytes(file1));
+                    PdfImportedPage page1 = writer.GetImportedPage(reader1, 1);
+                    writer.DirectContentUnder.AddTemplate(page1, 0, spaceFirst);
+
+                    string file2 = InFiles[(i * 2) - 1];
+                    PdfReader reader2 = new PdfReader(File.ReadAllBytes(file2));
+                    PdfImportedPage page2 = writer.GetImportedPage(reader2, 1);
+                    writer.DirectContentUnder.AddTemplate(page2, 0, (-reader2.GetPageSizeWithRotation(1).Height * 1 / 2) + spaceLast);
+
+                    document.SetPageSize(pageSize);
+                    document.NewPage();
+                }
+            }
+            document.Close();
+            readerSize.Close();
+            newpdfStream.Close();
+        }
