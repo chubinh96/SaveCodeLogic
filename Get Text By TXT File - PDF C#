@@ -1,0 +1,30 @@
+private void get_text_with_txt_Click(object sender, EventArgs e)
+        {
+            string pdfFile = @"\\10.121.21.2\data\DeliveryNote\SaveCopyPdfFile\Upload\cmsc_n.pdf";
+            getTextData_Test(pdfFile);
+        }
+        public List<string> getTextData_Test(string pdfFile)
+        {
+            string txtFile = @"\\10.121.21.2\data\DeliveryNote\SaveCopyPdfFile\Upload\cmsc_n.txt";
+            string[] lines = testGetTextFromTxt(pdfFile, txtFile);
+            List<string> list = new List<string>();
+            int mark = 0;
+            for (int i = 0; i < lines.Length; i++)
+            {
+                
+            }
+            return list;
+        }
+        protected string[] testGetTextFromTxt(string pdfFile, string txtFile)
+        {
+            //read pdf file and get text
+            PDDocument document = PDDocument.load(pdfFile);
+            PDFTextStripper stripper = new PDFTextStripper();
+            string txt_pdf = stripper.getText(document);
+            //write data into txt file
+            File.WriteAllText(txtFile, txt_pdf);
+            //get text from txt file
+            string[] lines = File.ReadAllLines(txtFile);
+            document.close();
+            return lines;
+        }
