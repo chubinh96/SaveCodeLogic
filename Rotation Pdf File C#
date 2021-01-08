@@ -1,0 +1,18 @@
+private void rotation_pdf_Click(object sender, EventArgs e)
+        {
+            string pdfFile = Application.StartupPath + "\\NewPrinterLog\\Rotation\\input.pdf";
+            string newPdfFile = Application.StartupPath + "\\NewPrinterLog\\Rotation\\output.pdf";
+            FileStream newPdfStream = new FileStream(newPdfFile, FileMode.Create, FileAccess.ReadWrite);
+            PdfReader reader = new PdfReader(pdfFile);
+
+            PdfDictionary page = reader.GetPageN(1);
+            PdfNumber rotate = page.GetAsNumber(PdfName.ROTATE);
+            int rotation = -90;
+
+            page.Put(PdfName.ROTATE, new PdfNumber(rotation));
+
+            PdfStamper stamper = new PdfStamper(reader, newPdfStream);
+            stamper.Close();
+            reader.Close();
+            newPdfStream.Close();
+        }
