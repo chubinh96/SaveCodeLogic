@@ -1,0 +1,21 @@
+public void test_edit_pos_pdf(string sourceFile, string destineFile, float x, float y)
+        {
+            using (FileStream newPdfStream = new FileStream(destineFile, FileMode.Create, FileAccess.ReadWrite))
+            using (PdfReader reader = new PdfReader(sourceFile))
+            {
+                iTextSharp.text.Rectangle pageSize = reader.GetPageSize(1);
+                Document document = new Document(pageSize);
+                PdfWriter writer = PdfWriter.GetInstance(document, newPdfStream);
+                document.Open();
+                PdfContentByte content = writer.DirectContent;
+                PdfImportedPage page = writer.GetImportedPage(reader, 1);
+
+                content.AddTemplate(page, x, y);
+                content.Fill();
+                document.SetPageSize(pageSize);
+                document.NewPage();
+                document.Close();
+                reader.Close();
+                newPdfStream.Close();
+            }
+        }
