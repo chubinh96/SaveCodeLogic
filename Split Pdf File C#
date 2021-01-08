@@ -1,0 +1,25 @@
+private void cut_a_page_Click(object sender, EventArgs e)
+        {
+            string pdfFile = Application.StartupPath + "\\NewPrinterLog\\upload\\BC_2.pdf";
+            //string pdfFile = @"\\10.121.21.2\data\DeliveryNote\SaveCopyPdfFile\POS\4500004214-00010.pdf";
+            //string newPdfFile = Application.StartupPath + "\\NewPrinterLog\\page1\\bc_page_2.pdf";
+            string newPdfFile = @"\\10.121.21.2\data\DeliveryNote\SaveCopyPdfFile\page1\bc2_page_1.pdf";
+
+            FileStream newPdfStream = new FileStream(newPdfFile, FileMode.Create, FileAccess.ReadWrite);
+            PdfReader reader = new PdfReader(pdfFile);
+
+            iTextSharp.text.Rectangle pageSize = reader.GetPageSize(1);
+
+            Document document = new Document(pageSize);
+            PdfWriter writer = PdfWriter.GetInstance(document, newPdfStream);
+            document.Open();
+            PdfContentByte content = writer.DirectContent;
+            PdfImportedPage page = writer.GetImportedPage(reader, 1);
+            content.AddTemplate(page, 0, 0);
+            content.Fill();
+            document.SetPageSize(pageSize);
+            document.NewPage();
+            document.Close();
+            reader.Close();
+            newPdfStream.Close();
+        }
