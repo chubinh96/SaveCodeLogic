@@ -1,0 +1,20 @@
+public void insert_text_print(string sourceFile, string destinationFile)
+        {
+            using (FileStream newPdfStream = new FileStream(destinationFile, FileMode.Create, FileAccess.ReadWrite))
+            using (PdfReader reader = new PdfReader(sourceFile))
+            using (PdfStamper stamper = new PdfStamper(reader, newPdfStream))
+            {
+                PdfContentByte content = stamper.GetOverContent(1);
+
+                content.SetColorFill(BaseColor.BLACK);
+                content.SetFontAndSize(BaseFont.CreateFont("c:\\windows\\fonts\\msgothic.ttc,0", BaseFont.IDENTITY_H, BaseFont.EMBEDDED), 9);
+
+                content.BeginText();
+                content.ShowTextAligned(1, "798713", 518, 665, 0);
+                content.ShowTextAligned(1, "01/18", 532, 655, 0);
+                content.EndText();
+                stamper.Close();
+                reader.Close();
+                newPdfStream.Close();
+            }
+        }
