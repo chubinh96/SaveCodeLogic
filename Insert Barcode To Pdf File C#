@@ -1,0 +1,38 @@
+private void insert_barcode_Click(object sender, EventArgs e)
+        {
+            string sourceFile = "";
+            string destinationFile = "";
+            using (FileStream newPdfStream = new FileStream(destinationFile, FileMode.Create, FileAccess.ReadWrite))
+            using (PdfReader reader = new PdfReader(sourceFile))
+            using (PdfStamper stamper = new PdfStamper(reader, newPdfStream))
+            {
+                PdfContentByte content = stamper.GetOverContent(1);
+
+                content.SetColorFill(BaseColor.BLACK);
+                content.SetFontAndSize(BaseFont.CreateFont("c:\\windows\\fonts\\msgothic.ttc,0", BaseFont.IDENTITY_H, BaseFont.EMBEDDED), 9);
+
+                content.BeginText();
+                string kmno_j = "123456";
+                if (kmno_j.Length > 0)
+                {
+                    float posX_Barcode = 123;
+                    float posY_Barcode = 456;
+                    iTextSharp.text.Image image = AddBarcode_2(content, kmno_j);
+                    image.SetAbsolutePosition(posX_Barcode, posY_Barcode);
+                    content.AddImage(image);
+                }
+                content.EndText();
+                stamper.Close();
+                reader.Close();
+                newPdfStream.Close();
+            }
+        }
+        public static iTextSharp.text.Image AddBarcode_2(PdfContentByte content, String s)
+        {
+            Barcode128 barcode = new Barcode128();
+            barcode.Font = null;
+            barcode.Code = s;
+            barcode.BarHeight = 15;
+            iTextSharp.text.Image image = barcode.CreateImageWithBarcode(content, null, BaseColor.WHITE);
+            return image;
+        }
