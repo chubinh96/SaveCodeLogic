@@ -1,0 +1,29 @@
+$(window).scroll(function() {    
+    var element = $('#header'),
+       scroll = $(window).scrollTop();
+
+    if (scroll > 300) {
+        $("#header").addClass("fixed");
+    }
+    else {
+    	$("#header").removeClass("fixed");
+    }
+
+    $('h1').each(function () {
+        if (isScrolledIntoView(this) === true) {
+            $(this).addClass('slide-top')
+        }
+
+    });
+
+});
+
+function isScrolledIntoView(elem) {
+    var docViewTop = $(window).scrollTop();
+    var docViewBottom = docViewTop + $(window).height();
+
+    var elemTop = $(elem).offset().top;
+    var elemBottom = elemTop + $(elem).height();
+
+    return ((elemBottom <= docViewBottom) && (elemTop >= docViewTop));
+}
