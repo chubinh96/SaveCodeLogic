@@ -1,0 +1,74 @@
+//html
+<div id="frame">
+  <section id="menu">
+    <ul>
+      <li><a href="#one">Menu Item 1</a></li>
+      <li><a href="#two">Menu Item 2</a></li>
+      <li><a href="#thr">Menu Item 3</a></li>
+      <li><a href="#fou">Menu Item 4</a></li>
+      <li><a href="#fiv">Menu Item 5</a></li>
+      <li><a href="#six">Menu Item 6</a></li>
+    </ul>
+  </section>
+    <hr/>
+    <div class="block" id="one">1</div>
+    <hr/>
+    <div class="block" id="two">2</div>
+    <hr/>
+    <div class="block" id="thr">3</div>
+    <hr/>
+    <div class="block" id="fou">4</div>
+    <hr/>
+    <div class="block" id="fiv">5</div>
+    <hr/>
+    <div class="block" id="six">6</div>
+    <hr/>
+    <div class="block" id="footer">f</div>
+</div>
+
+//css
+.block {
+    background: #eee;
+    height: 300px;
+}
+body {
+    margin: 100px 0 0;
+}
+#menu {
+    background: #444;
+    z-index: 99;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    padding: 10px;
+}
+#menu ul {
+    list-style: none;
+    font-family: Helvetica, sans-serif;
+}
+#menu a {
+    color: #ccc;
+}
+#menu a.active {
+    color: #fff;
+}
+#menu .selected a{
+    color : #ff0;
+}
+
+//javascript
+    var position = [];
+    $('.block').each(function(){
+        position.push(Math.abs($(this).position().top))
+    })
+console.log(position)
+    $(window).scroll( function() {
+        var value = $(this).scrollTop() + $('#menu').height();
+        $.each(position, function(i){
+            if(this > value){
+                $('.selected').removeClass('selected');
+                $("#menu li").eq(i-1).addClass('selected');
+                return false;
+            }
+        })
+    });
